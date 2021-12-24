@@ -3,6 +3,7 @@ package uriauth
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"net/url"
 	"regexp"
@@ -36,10 +37,14 @@ func URIAuthParse(uri string) (path string, args url.Values, err error) {
 // uri URL链接
 // rand 算法，默认为0
 // uid 用户ID，默认为0
-// key 用户签名key，不可公开
+// key 用户签名key，不可公开，不可为空
 // exp 过期时间戳, 单位秒
 func URIAuth(uri, rand, uid, key string, exp int64) (string, error) {
 	var scheme, host, path, args string
+
+	if key == "" {
+		return "", errors.New("key shoud not be empty")
+	}
 
 	p, err := regexp.Compile(`^(rtmp://)?([^/?]+)(/[^?]*)?(\\?.*)?$`)
 	if err != nil {
@@ -68,8 +73,12 @@ func URIAuth(uri, rand, uid, key string, exp int64) (string, error) {
 
 // URIAuthCheck 验证签名串是否合法
 // uri URL链接
-// key 用户签名key，不可公开
+// key 用户签名key，不可公开, 不可为空
 func URIAuthCheck(uri, key string) bool {
+	if key == "" {
+		return false
+	}
+
 	path, args, err := URIAuthParse(uri)
 	if err != nil {
 		return false
