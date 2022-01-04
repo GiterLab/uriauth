@@ -21,14 +21,17 @@ URI Auth
             fmt.Println(err)
         }
         // 签名URL结果
-        fmt.Printf("Auth: %s\n", authURI)
+        fmt.Println("Auth:", authURI)
         // 对 authURI 进行校验
         fmt.Println(uriauth.URIAuthCheck(authURI, key))
         // 对 authURI 提取 path & args
         fmt.Println(uriauth.URIAuthParse(authURI))
+        // 直接计算签名
+        fmt.Println("Auth:", exp, uriauth.URIPathAuth("/live/test", "", "", key, exp))
     }
 
     $ go run main.go
-    Auth: rtmp://ipc.example.com/live/test?a=123&b=456&auth_key=1640353115-0-0-55b1cb678d9552411734898a14802711
+    Auth: rtmp://ipc.example.com/live/test?a=123&b=456&auth_key=1641311904-0-0-6ecce59d62eef5eab899a9be1dee4b3b
     true
-    /live/test map[a:[123] auth_key:[1640353115-0-0-55b1cb678d9552411734898a14802711] b:[456]] <nil>
+    /live/test map[a:[123] auth_key:[1641311904-0-0-6ecce59d62eef5eab899a9be1dee4b3b] b:[456]] <nil>
+    Auth: 1641311904 6ecce59d62eef5eab899a9be1dee4b3b

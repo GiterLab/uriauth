@@ -97,3 +97,16 @@ func URIAuthCheck(uri, key string) bool {
 	}
 	return false
 }
+
+// URIPathAuth 直接计算PATH签名
+// path like: /live/test, 已 / 开头
+// key 用户签名key，不可公开, 不可为空
+func URIPathAuth(path, rand, uid, key string, exp int64) string {
+	if rand == "" {
+		rand = "0"
+	}
+	if uid == "" {
+		uid = "0"
+	}
+	return md5sum(fmt.Sprintf("%s-%d-%s-%s-%s", path, exp, rand, uid, key))
+}
