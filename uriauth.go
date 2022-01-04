@@ -18,7 +18,7 @@ func md5sum(src string) string {
 
 // URIAuthParse 从URL中提取出 path & args
 func URIAuthParse(uri string) (path string, args url.Values, err error) {
-	_, err = regexp.Compile(`^(rtmp://)?([^/?]+)(/[^?]*)?(\\?.*)?$`)
+	_, err = regexp.Compile(`^(http://|https://|ws://|wss://|rtmp://|rtsp://)?([^/?]+)(/[^?]*)?(\\?.*)?$`)
 	if err != nil {
 		return "", nil, err
 	}
@@ -46,7 +46,7 @@ func URIAuth(uri, rand, uid, key string, exp int64) (string, error) {
 		return "", errors.New("key shoud not be empty")
 	}
 
-	p, err := regexp.Compile(`^(rtmp://)?([^/?]+)(/[^?]*)?(\\?.*)?$`)
+	p, err := regexp.Compile(`^(http://|https://|ws://|wss://|rtmp://|rtsp://)?([^/?]+)(/[^?]*)?(\\?.*)?$`)
 	if err != nil {
 		return "", err
 	}
